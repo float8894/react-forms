@@ -9,6 +9,8 @@ export default function Login() {
     console.log(
       `Email: ${emailRef.current.value} || Password: ${passwordRef.current.value}`
     );
+
+    // event.target.reset();
   }
 
   return (
