@@ -1,26 +1,37 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Login() {
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(
-      `Email: ${emailRef.current.value} || Password: ${passwordRef.current.value}`
-    );
+    const enteredEmail = emailRef.current.value;
+    const enteredPassword = passwordRef.current.value;
+    console.log(`Email: ${enteredEmail} || Password: ${enteredPassword}`);
+
+    const emailIsValid = enteredEmail.includes('@');
+
+    if (!emailIsValid) {
+      setEmailIsInvalid(true);
+      return;
+    }
 
     // event.target.reset();
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} noValidate>
       <h2>Login</h2>
 
       <div className='control-row'>
         <div className='control no-margin'>
           <label htmlFor='email'>Email</label>
           <input id='email' type='email' name='email' ref={emailRef} />
+          <div className='control-error'>
+            {emailIsInvalid && <p>Please enter a valid email address.</p>}
+          </div>
         </div>
 
         <div className='control no-margin'>
