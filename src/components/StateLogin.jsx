@@ -5,6 +5,15 @@ export default function Login() {
     email: '',
     password: '',
   });
+
+  const [didBlur, setDidBlur] = useState({
+    email: false,
+    password: false,
+  });
+
+  const emailIsInvalid =
+    enteredValues.email !== '' && !enteredValues.email.includes('@');
+
   function handleSubmit(event) {
     event.preventDefault();
     console.log(
@@ -18,6 +27,15 @@ export default function Login() {
       [id]: val,
     }));
   }
+
+  function handleInputBlur(id) {
+    setDidBlur((prev) => ({ ...prev, [id]: true }));
+  }
+
+  function handleInputFocus(id) {
+    setDidBlur((prev) => ({ ...prev, [id]: false }));
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
@@ -29,9 +47,16 @@ export default function Login() {
             id='email'
             type='email'
             name='email'
+            onBlur={() => handleInputBlur('email')}
+            onFocus={() => handleInputFocus('email')}
             onChange={(event) => handleInputChange('email', event.target.value)}
             value={enteredValues.email}
           />
+          <div className='control-error'>
+            {emailIsInvalid && didBlur.email && (
+              <p>Please enter a valid email address.</p>
+            )}
+          </div>
         </div>
 
         <div className='control no-margin'>
@@ -40,6 +65,8 @@ export default function Login() {
             id='password'
             type='password'
             name='password'
+            onBlur={() => handleInputBlur('password')}
+            onFocus={() => handleInputFocus('password')}
             onChange={(event) =>
               handleInputChange('password', event.target.value)
             }
